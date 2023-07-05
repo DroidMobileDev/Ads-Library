@@ -217,6 +217,19 @@ public class NativeAd {
             return this;
         }
 
+        private NativeAdloaded nativeAdload;
+
+        public Builder setNativeEvent(NativeAdloaded nativeLoad){
+            this.nativeAdload = nativeLoad;
+            return this;
+        }
+
+        public interface NativeAdloaded {
+            void onNativeLoaded();
+        }
+
+
+
         public void loadNativeAd() {
 
             if (adStatus.equals(AD_STATUS_ON) && placementStatus != 0) {
@@ -250,6 +263,7 @@ public class NativeAd {
                 switch (adNetwork) {
                     case ADMOB:
                     case FAN_BIDDING_ADMOB:
+                        nativeAdload.onNativeLoaded();
                         if (admobNativeAd.getVisibility() != View.VISIBLE) {
                             AdLoader adLoader = new AdLoader.Builder(activity, adMobNativeId)
                                     .forNativeAd(NativeAd -> {
@@ -284,6 +298,7 @@ public class NativeAd {
 
                     case GOOGLE_AD_MANAGER:
                     case FAN_BIDDING_AD_MANAGER:
+                        nativeAdload.onNativeLoaded();
                         if (adManagerNativeAd.getVisibility() != View.VISIBLE) {
                             AdLoader adLoader = new AdLoader.Builder(activity, adManagerNativeId)
                                     .forNativeAd(NativeAd -> {
@@ -318,6 +333,7 @@ public class NativeAd {
 
                     case FAN:
                     case FACEBOOK:
+                        nativeAdload.onNativeLoaded();
                         fanNativeAd = new com.facebook.ads.NativeAd(activity, fanNativeId);
                         NativeAdListener nativeAdListener = new NativeAdListener() {
                             @Override
@@ -432,6 +448,7 @@ public class NativeAd {
                         break;
 
                     case STARTAPP:
+                        nativeAdload.onNativeLoaded();
                         if (startappNativeAd.getVisibility() != View.VISIBLE) {
                             StartAppNativeAd startAppNativeAd = new StartAppNativeAd(activity);
                             NativeAdPreferences nativePrefs = new NativeAdPreferences()
@@ -486,6 +503,7 @@ public class NativeAd {
                     case APPLOVIN:
                     case APPLOVIN_MAX:
                     case FAN_BIDDING_APPLOVIN_MAX:
+                        nativeAdload.onNativeLoaded();
                         if (applovinNativeAd.getVisibility() != View.VISIBLE) {
                             nativeAdLoader = new MaxNativeAdLoader(appLovinNativeId, activity);
                             nativeAdLoader.setNativeAdListener(new MaxNativeAdListener() {
@@ -538,6 +556,7 @@ public class NativeAd {
                         break;
 
                     case APPLOVIN_DISCOVERY:
+                        nativeAdload.onNativeLoaded();
                         if (appLovinDiscoveryMrecAd.getVisibility() != View.VISIBLE) {
                             AdRequest.Builder builder = new AdRequest.Builder();
                             Bundle bannerExtras = new Bundle();
@@ -670,6 +689,7 @@ public class NativeAd {
                 switch (backupAdNetwork) {
                     case ADMOB:
                     case FAN_BIDDING_ADMOB:
+                        nativeAdload.onNativeLoaded();
                         if (admobNativeAd.getVisibility() != View.VISIBLE) {
                             AdLoader adLoader = new AdLoader.Builder(activity, adMobNativeId)
                                     .forNativeAd(NativeAd -> {
@@ -705,6 +725,7 @@ public class NativeAd {
 
                     case GOOGLE_AD_MANAGER:
                     case FAN_BIDDING_AD_MANAGER:
+                        nativeAdload.onNativeLoaded();
                         if (adManagerNativeAd.getVisibility() != View.VISIBLE) {
                             AdLoader adLoader = new AdLoader.Builder(activity, adManagerNativeId)
                                     .forNativeAd(NativeAd -> {
@@ -740,6 +761,7 @@ public class NativeAd {
 
                     case FAN:
                     case FACEBOOK:
+                        nativeAdload.onNativeLoaded();
                         fanNativeAd = new com.facebook.ads.NativeAd(activity, fanNativeId);
                         NativeAdListener nativeAdListener = new NativeAdListener() {
                             @Override
@@ -855,6 +877,7 @@ public class NativeAd {
                         break;
 
                     case STARTAPP:
+                        nativeAdload.onNativeLoaded();
                         if (startappNativeAd.getVisibility() != View.VISIBLE) {
                             StartAppNativeAd startAppNativeAd = new StartAppNativeAd(activity);
                             NativeAdPreferences nativePrefs = new NativeAdPreferences()
@@ -910,6 +933,7 @@ public class NativeAd {
                     case APPLOVIN:
                     case APPLOVIN_MAX:
                     case FAN_BIDDING_APPLOVIN_MAX:
+                        nativeAdload.onNativeLoaded();
                         if (applovinNativeAd.getVisibility() != View.VISIBLE) {
                             nativeAdLoader = new MaxNativeAdLoader(appLovinNativeId, activity);
                             nativeAdLoader.setNativeAdListener(new MaxNativeAdListener() {
@@ -959,6 +983,7 @@ public class NativeAd {
                         break;
 
                     case APPLOVIN_DISCOVERY:
+                        nativeAdload.onNativeLoaded();
                         if (appLovinDiscoveryMrecAd.getVisibility() != View.VISIBLE) {
                             AdRequest.Builder builder = new AdRequest.Builder();
                             Bundle bannerExtras = new Bundle();
@@ -1051,6 +1076,7 @@ public class NativeAd {
 
                     case UNITY:
                     case NONE:
+                        nativeAdload.onNativeLoaded();
                         nativeAdViewContainer.setVisibility(View.GONE);
                         break;
                 }

@@ -201,7 +201,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void show() {
-        Toast.makeText(this, "Final test", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Final Intertitial", Toast.LENGTH_LONG).show();
+    }
+    private void show2() {
+        Toast.makeText(this, "Final Native", Toast.LENGTH_LONG).show();
     }
 
     private void showInterstitialAd() {
@@ -223,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
                 .setNativeAdBackgroundColor(R.color.colorNativeBackgroundLight, R.color.colorNativeBackgroundDark)
                 .setPadding(0, 0, 0, 0)
                 .setDarkTheme(sharedPref.getIsDarkTheme())
+                .setNativeEvent(() -> show2())
                 .build();
     }
 

@@ -208,6 +208,7 @@ public class InterstitialAd {
 
                                     @Override
                                     public void onAdFailedToShowFullScreenContent(@NonNull com.google.android.gms.ads.AdError adError) {
+                                        adCloseListener.onAdClosed();
                                         Log.d(TAG, "The ad failed to show.");
                                     }
 
@@ -246,6 +247,7 @@ public class InterstitialAd {
                                     @Override
                                     public void onAdDismissedFullScreenContent() {
                                         super.onAdDismissedFullScreenContent();
+                                        adCloseListener.onAdClosed();
                                         loadInterstitialAd();
                                     }
 
@@ -289,6 +291,7 @@ public class InterstitialAd {
                             @Override
                             public void onInterstitialDismissed(com.facebook.ads.Ad ad) {
                                 fanInterstitialAd.loadAd();
+                                adCloseListener.onAdClosed();
                             }
 
                             @Override
@@ -368,6 +371,7 @@ public class InterstitialAd {
                             @Override
                             public void onAdHidden(MaxAd ad) {
                                 maxInterstitialAd.loadAd();
+                                adCloseListener.onAdClosed();
                             }
 
                             @Override
@@ -387,6 +391,7 @@ public class InterstitialAd {
                             @Override
                             public void onAdDisplayFailed(MaxAd ad, MaxError error) {
                                 maxInterstitialAd.loadAd();
+                                adCloseListener.onAdClosed();
                             }
                         });
 
@@ -455,6 +460,7 @@ public class InterstitialAd {
                             @Override
                             public void onAdClosed(AdInfo adInfo) {
                                 Log.d(TAG, "onInterstitialAdClosed");
+                                adCloseListener.onAdClosed();
                                 loadInterstitialAd();
                             }
                         });
@@ -510,17 +516,20 @@ public class InterstitialAd {
                                     @Override
                                     public void onAdDismissedFullScreenContent() {
                                         loadInterstitialAd();
+                                        adCloseListener.onAdClosed();
                                     }
 
                                     @Override
                                     public void onAdFailedToShowFullScreenContent(@NonNull com.google.android.gms.ads.AdError adError) {
                                         Log.d(TAG, "The ad failed to show.");
+                                        adCloseListener.onAdClosed();
                                     }
 
                                     @Override
                                     public void onAdShowedFullScreenContent() {
                                         adMobInterstitialAd = null;
                                         Log.d(TAG, "The ad was shown.");
+                                        adCloseListener.onAdClosed();
                                     }
                                 });
                                 Log.i(TAG, "onAdLoaded");
@@ -531,6 +540,7 @@ public class InterstitialAd {
                                 Log.i(TAG, loadAdError.getMessage());
                                 adMobInterstitialAd = null;
                                 Log.d(TAG, "Failed load AdMob Interstitial Ad");
+                                adCloseListener.onAdClosed();
                             }
                         });
                         break;
@@ -552,6 +562,7 @@ public class InterstitialAd {
                                     public void onAdDismissedFullScreenContent() {
                                         super.onAdDismissedFullScreenContent();
                                         loadInterstitialAd();
+                                        adCloseListener.onAdClosed();
                                     }
 
                                     @Override
@@ -577,6 +588,7 @@ public class InterstitialAd {
                             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                                 super.onAdFailedToLoad(loadAdError);
                                 adManagerInterstitialAd = null;
+                                adCloseListener.onAdClosed();
                                 Log.d(TAG, "Failed load Ad Manager Interstitial Ad");
                             }
                         });
@@ -593,6 +605,7 @@ public class InterstitialAd {
                             @Override
                             public void onInterstitialDismissed(com.facebook.ads.Ad ad) {
                                 fanInterstitialAd.loadAd();
+                                adCloseListener.onAdClosed();
                             }
 
                             @Override
@@ -630,6 +643,7 @@ public class InterstitialAd {
 
                             @Override
                             public void onFailedToReceiveAd(@Nullable Ad ad) {
+                                adCloseListener.onAdClosed();
                                 Log.d(TAG, "Failed to load Startapp Interstitial Ad");
                             }
                         });
@@ -671,6 +685,7 @@ public class InterstitialAd {
                             @Override
                             public void onAdHidden(MaxAd ad) {
                                 maxInterstitialAd.loadAd();
+                                adCloseListener.onAdClosed();
                             }
 
                             @Override
@@ -681,6 +696,7 @@ public class InterstitialAd {
                             @Override
                             public void onAdLoadFailed(String adUnitId, MaxError error) {
                                 retryAttempt++;
+                                adCloseListener.onAdClosed();
                                 long delayMillis = TimeUnit.SECONDS.toMillis((long) Math.pow(2, Math.min(6, retryAttempt)));
                                 new Handler().postDelayed(() -> maxInterstitialAd.loadAd(), delayMillis);
                                 Log.d(TAG, "failed to load AppLovin Interstitial");
@@ -709,6 +725,7 @@ public class InterstitialAd {
 
                             @Override
                             public void failedToReceiveAd(int errorCode) {
+                                adCloseListener.onAdClosed();
                             }
                         });
                         appLovinInterstitialAdDialog = AppLovinInterstitialAd.create(AppLovinSdk.getInstance(activity), activity);
@@ -721,6 +738,7 @@ public class InterstitialAd {
                     case IRONSOURCE:
                     case FAN_BIDDING_IRONSOURCE:
                         IronSource.setLevelPlayInterstitialListener(new LevelPlayInterstitialListener() {
+
                             @Override
                             public void onAdReady(AdInfo adInfo) {
                                 Log.d(TAG, "onInterstitialAdReady");
@@ -743,6 +761,7 @@ public class InterstitialAd {
 
                             @Override
                             public void onAdShowFailed(IronSourceError ironSourceError, AdInfo adInfo) {
+                                adCloseListener.onAdClosed();
                                 Log.d(TAG, "onInterstitialAdShowFailed" + " " + ironSourceError);
                             }
 
@@ -754,6 +773,7 @@ public class InterstitialAd {
                             @Override
                             public void onAdClosed(AdInfo adInfo) {
                                 Log.d(TAG, "onInterstitialAdClosed");
+                                adCloseListener.onAdClosed();
                                 loadInterstitialAd();
                             }
                         });
@@ -794,6 +814,7 @@ public class InterstitialAd {
 
                     case NONE:
                         //do nothing
+                        adCloseListener.onAdClosed();
                         break;
                 }
             }
@@ -810,8 +831,8 @@ public class InterstitialAd {
                     switch (adNetwork) {
                         case ADMOB:
                         case FAN_BIDDING_ADMOB:
+                            this.adCloseListener = adCloseListener;
                             if (adMobInterstitialAd != null) {
-                                this.adCloseListener = adCloseListener;
                                 adMobInterstitialAd.show(activity);
                                 Log.d(TAG, "admob interstitial not null");
                             } else {
@@ -822,6 +843,7 @@ public class InterstitialAd {
 
                         case GOOGLE_AD_MANAGER:
                         case FAN_BIDDING_AD_MANAGER:
+                            this.adCloseListener = adCloseListener;
                             if (adManagerInterstitialAd != null) {
                                 adManagerInterstitialAd.show(activity);
                                 Log.d(TAG, "ad manager interstitial not null");
@@ -832,6 +854,7 @@ public class InterstitialAd {
                             break;
 
                         case FAN:
+                            this.adCloseListener = adCloseListener;
                             if (fanInterstitialAd != null && fanInterstitialAd.isAdLoaded()) {
                                 fanInterstitialAd.show();
                                 Log.d(TAG, "fan interstitial not null");
@@ -842,6 +865,7 @@ public class InterstitialAd {
                             break;
 
                         case STARTAPP:
+                            this.adCloseListener = adCloseListener;
                             if (startAppAd != null) {
                                 startAppAd.showAd();
                                 Log.d(TAG, "startapp interstitial not null [counter] : " + counter);
@@ -852,6 +876,7 @@ public class InterstitialAd {
                             break;
 
                         case UNITY:
+                            this.adCloseListener = adCloseListener;
                             final IInterstitialAdShowListener showListener = new IInterstitialAdShowListener() {
                                 @Override
                                 public void onInterstitialShowed(com.unity3d.mediation.InterstitialAd interstitialAd) {
@@ -865,7 +890,7 @@ public class InterstitialAd {
 
                                 @Override
                                 public void onInterstitialClosed(com.unity3d.mediation.InterstitialAd interstitialAd) {
-
+                                    adCloseListener.onAdClosed();
                                 }
 
                                 @Override
@@ -880,6 +905,7 @@ public class InterstitialAd {
                         case APPLOVIN:
                         case APPLOVIN_MAX:
                         case FAN_BIDDING_APPLOVIN_MAX:
+                            this.adCloseListener = adCloseListener;
                             if (maxInterstitialAd != null && maxInterstitialAd.isReady()) {
                                 Log.d(TAG, "ready : " + counter);
                                 maxInterstitialAd.showAd();
@@ -901,6 +927,7 @@ public class InterstitialAd {
 
                         case IRONSOURCE:
                         case FAN_BIDDING_IRONSOURCE:
+                            this.adCloseListener = adCloseListener;
                             if (IronSource.isInterstitialReady()) {
                                 IronSource.showInterstitial(ironSourceInterstitialId);
                             } else {
@@ -930,6 +957,7 @@ public class InterstitialAd {
                 switch (backupAdNetwork) {
                     case ADMOB:
                     case FAN_BIDDING_ADMOB:
+                        this.adCloseListener = adCloseListener;
                         if (adMobInterstitialAd != null) {
                             adMobInterstitialAd.show(activity);
                         }
@@ -937,24 +965,28 @@ public class InterstitialAd {
 
                     case GOOGLE_AD_MANAGER:
                     case FAN_BIDDING_AD_MANAGER:
+                        this.adCloseListener = adCloseListener;
                         if (adManagerInterstitialAd != null) {
                             adManagerInterstitialAd.show(activity);
                         }
                         break;
 
                     case FAN:
+                        this.adCloseListener = adCloseListener;
                         if (fanInterstitialAd != null && fanInterstitialAd.isAdLoaded()) {
                             fanInterstitialAd.show();
                         }
                         break;
 
                     case STARTAPP:
+                        this.adCloseListener = adCloseListener;
                         if (startAppAd != null) {
                             startAppAd.showAd();
                         }
                         break;
 
                     case UNITY:
+                        this.adCloseListener = adCloseListener;
                         final IInterstitialAdShowListener showListener = new IInterstitialAdShowListener() {
                             @Override
                             public void onInterstitialShowed(com.unity3d.mediation.InterstitialAd interstitialAd) {
@@ -968,11 +1000,12 @@ public class InterstitialAd {
 
                             @Override
                             public void onInterstitialClosed(com.unity3d.mediation.InterstitialAd interstitialAd) {
-
+                                adCloseListener.onAdClosed();
                             }
 
                             @Override
                             public void onInterstitialFailedShow(com.unity3d.mediation.InterstitialAd interstitialAd, ShowError showError, String s) {
+                                adCloseListener.onAdClosed();
                                 Log.d(TAG, "unity ads show failure");
                             }
                         };
@@ -982,12 +1015,14 @@ public class InterstitialAd {
                     case APPLOVIN:
                     case APPLOVIN_MAX:
                     case FAN_BIDDING_APPLOVIN_MAX:
+                        this.adCloseListener = adCloseListener;
                         if (maxInterstitialAd != null && maxInterstitialAd.isReady()) {
                             maxInterstitialAd.showAd();
                         }
                         break;
 
                     case APPLOVIN_DISCOVERY:
+                        this.adCloseListener = adCloseListener;
                         if (appLovinInterstitialAdDialog != null) {
                             appLovinInterstitialAdDialog.showAndRender(appLovinAd);
                         }
@@ -999,6 +1034,7 @@ public class InterstitialAd {
 
                     case IRONSOURCE:
                     case FAN_BIDDING_IRONSOURCE:
+                        this.adCloseListener = adCloseListener;
                         if (IronSource.isInterstitialReady()) {
                             IronSource.showInterstitial(ironSourceInterstitialId);
                         }
@@ -1012,6 +1048,7 @@ public class InterstitialAd {
 
                     case NONE:
                         //do nothing
+                        this.adCloseListener = adCloseListener;
                         break;
                 }
             }
