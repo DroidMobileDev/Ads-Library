@@ -4,7 +4,7 @@ public class Constant {
 
     public static final String AD_STATUS = "1";
 
-    public static String AD_NETWORK = "admob";
+    public static String AD_NETWORK = "fan";
     public static final String BACKUP_AD_NETWORK = "none";
 
     public static final String ADMOB_BANNER_ID = "ca-app-pub-3940256099942544/6300978111";
@@ -59,7 +59,7 @@ public class Constant {
     public static final boolean OPEN_ADS_ON_START = true;
     public static final boolean OPEN_ADS_ON_RESUME = true;
 
-    public static final int INTERSTITIAL_AD_INTERVAL = 3;
+    public static final int INTERSTITIAL_AD_INTERVAL = 1;
     public static final int NATIVE_AD_INDEX = 2;
     public static final int NATIVE_AD_INTERVAL = 8;
 

@@ -283,9 +283,19 @@ public class NativeAd {
                                         nativeAdViewContainer.setVisibility(View.VISIBLE);
                                     })
                                     .withAdListener(new AdListener() {
+
+                                        @Override
+                                        public void onAdLoaded() {
+                                            super.onAdLoaded();
+                                            nativeAdload.onNativeLoaded();
+                                        }
+
+
+
                                         @Override
                                         public void onAdFailedToLoad(@NonNull LoadAdError adError) {
                                             loadBackupNativeAd();
+
                                         }
                                     })
                                     .build();
@@ -293,7 +303,6 @@ public class NativeAd {
                         } else {
                             Log.d(TAG, "AdMob Native Ad has been loaded");
                         }
-                        nativeAdload.onNativeLoaded();
                         break;
 
                     case GOOGLE_AD_MANAGER:
@@ -316,6 +325,7 @@ public class NativeAd {
                                         adManagerNativeAd.setNativeAd(NativeAd);
                                         adManagerNativeAd.setVisibility(View.VISIBLE);
                                         nativeAdViewContainer.setVisibility(View.VISIBLE);
+
                                     })
                                     .withAdListener(new AdListener() {
                                         @Override
@@ -714,8 +724,16 @@ public class NativeAd {
                                         nativeAdViewContainer.setVisibility(View.VISIBLE);
                                     })
                                     .withAdListener(new AdListener() {
+
+                                        @Override
+                                        public void onAdLoaded() {
+                                            super.onAdLoaded();
+                                            nativeAdload.onNativeLoaded();
+                                        }
+
                                         @Override
                                         public void onAdFailedToLoad(@NonNull LoadAdError adError) {
+                                            nativeAdload.onNativeLoaded();
                                             admobNativeAd.setVisibility(View.GONE);
                                             nativeAdViewContainer.setVisibility(View.GONE);
                                         }
@@ -725,7 +743,7 @@ public class NativeAd {
                         } else {
                             Log.d(TAG, "AdMob Native Ad has been loaded");
                         }
-                        nativeAdload.onNativeLoaded();
+
                         break;
 
                     case GOOGLE_AD_MANAGER:

@@ -22,6 +22,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -195,20 +196,26 @@ public class InterstitialAd {
                 switch (adNetwork) {
                     case ADMOB:
                     case FAN_BIDDING_ADMOB:
+
                         com.google.android.gms.ads.interstitial.InterstitialAd.load(activity, adMobInterstitialId, Tools.getAdRequest(activity, legacyGDPR), new InterstitialAdLoadCallback() {
                             @Override
                             public void onAdLoaded(@NonNull com.google.android.gms.ads.interstitial.InterstitialAd interstitialAd) {
                                 adMobInterstitialAd = interstitialAd;
                                 adMobInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+
+
+
                                     @Override
                                     public void onAdDismissedFullScreenContent() {
                                         adCloseListener.onAdClosed();
                                         loadInterstitialAd();
+                                        Log.d("Jozef", "The ad failed to show.");
                                     }
 
                                     @Override
                                     public void onAdFailedToShowFullScreenContent(@NonNull com.google.android.gms.ads.AdError adError) {
                                         adCloseListener.onAdClosed();
+
                                         Log.d(TAG, "The ad failed to show.");
                                     }
 
@@ -814,7 +821,7 @@ public class InterstitialAd {
 
                     case NONE:
                         //do nothing
-                        adCloseListener.onAdClosed();
+                        this.adCloseListener = adCloseListener;
                         break;
                 }
             }
@@ -836,7 +843,7 @@ public class InterstitialAd {
                                 adMobInterstitialAd.show(activity);
                                 Log.d(TAG, "admob interstitial not null");
                             } else {
-                                showBackupInterstitialAd();
+                                showBackupInterstitialAd(adCloseListener);
                                 Log.d(TAG, "admob interstitial null");
                             }
                             break;
@@ -848,7 +855,7 @@ public class InterstitialAd {
                                 adManagerInterstitialAd.show(activity);
                                 Log.d(TAG, "ad manager interstitial not null");
                             } else {
-                                showBackupInterstitialAd();
+                                showBackupInterstitialAd(adCloseListener);
                                 Log.d(TAG, "ad manager interstitial null");
                             }
                             break;
@@ -859,7 +866,7 @@ public class InterstitialAd {
                                 fanInterstitialAd.show();
                                 Log.d(TAG, "fan interstitial not null");
                             } else {
-                                showBackupInterstitialAd();
+                                showBackupInterstitialAd(adCloseListener);
                                 Log.d(TAG, "fan interstitial null");
                             }
                             break;
@@ -870,7 +877,7 @@ public class InterstitialAd {
                                 startAppAd.showAd();
                                 Log.d(TAG, "startapp interstitial not null [counter] : " + counter);
                             } else {
-                                showBackupInterstitialAd();
+                                showBackupInterstitialAd(adCloseListener);
                                 Log.d(TAG, "startapp interstitial null");
                             }
                             break;
@@ -896,7 +903,7 @@ public class InterstitialAd {
                                 @Override
                                 public void onInterstitialFailedShow(com.unity3d.mediation.InterstitialAd interstitialAd, ShowError showError, String s) {
                                     Log.d(TAG, "unity ads show failure");
-                                    showBackupInterstitialAd();
+                                    showBackupInterstitialAd(adCloseListener);
                                 }
                             };
                             unityInterstitialAd.show(showListener);
@@ -911,7 +918,7 @@ public class InterstitialAd {
                                 maxInterstitialAd.showAd();
                                 Log.d(TAG, "show ad");
                             } else {
-                                showBackupInterstitialAd();
+                                showBackupInterstitialAd(adCloseListener);
                             }
                             break;
 
@@ -931,7 +938,7 @@ public class InterstitialAd {
                             if (IronSource.isInterstitialReady()) {
                                 IronSource.showInterstitial(ironSourceInterstitialId);
                             } else {
-                                showBackupInterstitialAd();
+                                showBackupInterstitialAd(adCloseListener);
                             }
                             break;
 
@@ -942,6 +949,8 @@ public class InterstitialAd {
 //                                showBackupInterstitialAd();
 //                            }
                             break;
+                        default:
+                            this.adCloseListener = adCloseListener;
                     }
                     counter = 1;
                 } else {
@@ -951,7 +960,7 @@ public class InterstitialAd {
             }
         }
 
-        public void showBackupInterstitialAd() {
+        public void showBackupInterstitialAd(final AdCloseListener adCloseListener) {
             if (adStatus.equals(AD_STATUS_ON) && placementStatus != 0) {
                 Log.d(TAG, "Show Backup Interstitial Ad [" + backupAdNetwork.toUpperCase() + "]");
                 switch (backupAdNetwork) {
@@ -1047,8 +1056,8 @@ public class InterstitialAd {
                         break;
 
                     case NONE:
+                        adCloseListener.onAdClosed();
                         //do nothing
-                        this.adCloseListener = adCloseListener;
                         break;
                 }
             }
